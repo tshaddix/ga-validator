@@ -27,6 +27,8 @@ Gets a dimension by GA value.
 gav.getDimension('ga:browser'); //returns { value : 'ga:browser', name : 'Browser', regex : RegExpObject }
 ```
 
+------------------------------------------------------------------
+
 ###getMetric(met)###
 
 Gets a metric by GA value.
@@ -40,6 +42,8 @@ Gets a metric by GA value.
 ```js
 gav.getMetric('ga:visits'); //returns { value : 'ga:visits', name : 'Visits', regex : RegExpObject }
 ```
+
+------------------------------------------------------------------
 
 ###checkDimension(dim)###
 
@@ -56,6 +60,8 @@ gav.checkDimension('ga:browser'); //returns true
 gav.checkDimension('ga:bad'); //returns false
 ```
 
+------------------------------------------------------------------
+
 ###checkMetric(met)###
 
 Checks whether a metric is valid.
@@ -70,6 +76,8 @@ Checks whether a metric is valid.
 gav.checkMetric('ga:visits'); //returns true
 gav.checkMetric('ga:bad'); //returns false
 ```
+
+------------------------------------------------------------------
 
 ###checkSort(sort)###
 
@@ -86,6 +94,8 @@ gav.checkSort('-ga:visits'); //returns true
 gav.checkSort('ga:visits'); //returns true
 ```
 
+------------------------------------------------------------------
+
 ###checkSegment(seg)###
 
 Checks whether a segment value is valid.
@@ -100,6 +110,8 @@ Checks whether a segment value is valid.
 gav.checkSegment('gaid:10'); //returns true
 gav.checkSegment('dynamic::ga:medium==referral'); //returns true
 ```
+
+------------------------------------------------------------------
 
 ###checkFilter(filter)###
 
