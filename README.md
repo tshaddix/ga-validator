@@ -6,11 +6,9 @@ Google Analytics validator (GAV) for NodeJs. Easily validate Google Analytics qu
 ##Usage##
 
 ```js
-
 gav = require('gav');
 
 //Do stuff...
-
 ```
 
 ##Methods##
@@ -26,9 +24,7 @@ Gets a dimension by GA value.
 **Example**
 
 ```js
-
 gav.getDimension('ga:browser'); //returns { value : 'ga:browser', name : 'Browser', regex : RegExpObject }
-
 ```
 
 ###getMetric(met)###
@@ -42,9 +38,7 @@ Gets a metric by GA value.
 **Example**
 
 ```js
-
 gav.getMetric('ga:visits'); //returns { value : 'ga:visits', name : 'Visits', regex : RegExpObject }
-
 ```
 
 ###checkDimension(dim)###
@@ -58,10 +52,8 @@ Checks whether a dimension is valid.
 **Example**
 
 ```js
-
 gav.checkDimension('ga:browser'); //returns true
 gav.checkDimension('ga:bad'); //returns false
-
 ```
 
 ###checkMetric(met)###
@@ -75,10 +67,8 @@ Checks whether a metric is valid.
 **Example**
 
 ```js
-
 gav.checkMetric('ga:visits'); //returns true
 gav.checkMetric('ga:bad'); //returns false
-
 ```
 
 ###checkSort(sort)###
@@ -92,10 +82,8 @@ Checks whether a sort value is valid.
 **Example**
 
 ```js
-
 gav.checkSort('-ga:visits'); //returns true
 gav.checkSort('ga:visits'); //returns true
-
 ```
 
 ###checkSegment(seg)###
@@ -109,10 +97,8 @@ Checks whether a segment value is valid.
 **Example**
 
 ```js
-
 gav.checkSegment('gaid:10'); //returns true
 gav.checkSegment('dynamic::ga:medium==referral'); //returns true
-
 ```
 
 ###checkFilter(filter)###
@@ -126,7 +112,5 @@ Checks whether a filter value is valid.
 **Example**
 
 ```js
-
 gav.checkSegment('ga:visits>10;ga:country==Canada'); //returns true
-
 ```
