@@ -2,6 +2,10 @@ dimensions = []
 
 metrics = []
 
+metrics_regex = null
+
+dimensions_regex = null
+
 #
 # Adds a metric to internal storage
 # 	@param {string} metric value
@@ -15,7 +19,6 @@ addMetric = (met, name, regex=met)->
 		name : name
 		regex : new RegExp "^#{regex}$"
 	}
-	return undefined
 
 #
 # Adds a dimension to internal storage
@@ -30,7 +33,6 @@ addDimension = (dim, name, regex=dim)->
 		name : name
 		regex : new RegExp "^#{regex}$"
 	}
-	return undefined
 	
 #
 # Gets the dimension which matches param
@@ -56,7 +58,7 @@ getMetric = (met)->
 # 	@returns {boolean} true if matched
 #
 checkDimension = (dim)->
-	return getDimension(dim)?
+	return dimensions_regex.test dim
 
 #
 # Checks wether a metric value is valid
@@ -64,7 +66,7 @@ checkDimension = (dim)->
 # 	@returns {boolean} true if matched
 #
 checkMetric = (met)->
-	return getMetric(met)?
+	return metrics_regex.test met
 
 #
 # Checks wether a sort is valid
@@ -122,6 +124,23 @@ checkFilter = (filter)->
 				if not checkDimension(components[0]) then return false
 
 	return true
+
+buildRegex = ->
+	mreg = ''
+
+	for metric, i in metrics
+		if i isnt 0 then mreg += '|'
+		mreg += metric.regex.source
+
+	metrics_regex = new RegExp mreg
+
+	dreg = ''
+
+	for dim, i in dimensions
+		if i isnt 0 then dreg += '|'
+		dreg += dim.regex.source
+
+	dimensions_regex = new RegExp dreg
 
 #Visitor
 addMetric 'ga:visitors', 'Visitors'
@@ -398,6 +417,11 @@ addDimension 'ga:nthMonth', 'Nth Month'
 addDimension 'ga:nthWeek', 'Nth Week'
 addDimension 'ga:nthDay', 'Nth Day'
 addDimension 'ga:dayOfWeek', 'Day Of Week'
+
+#
+# Build Regex
+#
+do buildRegex
 
 #
 # Exports
