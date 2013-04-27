@@ -126,7 +126,7 @@ Checks whether a filter value is valid.
 **Example**
 
 ```js
-gav.checkSegment('ga:visits>10;ga:country==Canada'); //returns true
+gav.checkFilter('ga:visits>10;ga:country==Canada'); //returns true
 ```
 
 ##License##
