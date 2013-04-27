@@ -5,7 +5,7 @@ Google Analytics Validator (GAV) for nodejs. Easily validate Google Analytics qu
 
 ##Methods##
 
-Documention will be update shortly.
+Documention will be updated shortly.
 
 ###getDimension(dim)###
 
