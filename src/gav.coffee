@@ -89,7 +89,7 @@ checkSegment = (seg)->
 	is_dynamic = new RegExp('^dynamic::').test seg
 
 	if is_dynamic then return checkFilter seg.replace /^dynamic::/, ''
-	else return new RegExp('^gaid::[0-9]+$').test seg
+	else return new RegExp('^gaid::-?[0-9]+$').test seg
 
 #
 # Checks whether filter is valid format
