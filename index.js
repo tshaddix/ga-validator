@@ -1,2 +1,2 @@
 require('coffee-script');
-require('./lib/gav.coffee');
+module.exports = require('./lib/gav.coffee');
