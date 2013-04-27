@@ -5,6 +5,8 @@ Google Analytics validator (GAV) for NodeJs. Easily validate Google Analytics qu
 
 ##Usage##
 
+Install gav through npm: `npm install gav`
+
 ```js
 gav = require('gav');
 
