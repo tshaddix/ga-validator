@@ -2,7 +2,7 @@
 	"author" : "tyler shaddix",
 	"name": "gav",
 	"description": "A Google Analytics validator for NodeJS",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"repository": {
 		"type" : "git",
 		"url" : "http://github.com/tinbin/gav.git"
