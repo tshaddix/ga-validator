@@ -109,7 +109,7 @@ Checks whether a segment value is valid.
 **Example**
 
 ```js
-gav.checkSegment('gaid:10'); //returns true
+gav.checkSegment('gaid::10'); //returns true
 gav.checkSegment('dynamic::ga:medium==referral'); //returns true
 ```
 
