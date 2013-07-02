@@ -112,7 +112,15 @@ checkFilter = (filter)->
 		#loop through or expressions
 		for or_exp in or_exps
 			if not exp_type?
-				exp_type = if new RegExp('(==|!=|>|<|>=|<=)[0-9]+').test(or_exp) then 'metric' else 'dimension'
+				ga_name = or_exp.split(new RegExp('==|!=|=@|!@|=~|!~|!=|>|<|>=|<=', 'g'), 2)[0]
+
+				if checkMetric(ga_name)
+					exp_type = 'metric'
+				else if checkDimension(ga_name)
+					exp_type = 'dimension'
+				else
+					return false
+
 
 			components = if exp_type is 'metric' then components = or_exp.split new RegExp('==|!=|>|<|>=|<=', 'g'), 2 else or_exp.split new RegExp('==|!=|=@|!@|=~|!~', 'g'), 2
 
