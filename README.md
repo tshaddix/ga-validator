@@ -1,7 +1,7 @@
 Google Analytics Validator
 =========================
 
-Google Analytics validator for NodeJs. Easily validate Google Analytics query parameters. It is used extensively in our [OOcharts](https://oocharts.com) app.
+Google Analytics validator for NodeJs. Easily validate Google Analytics query parameters. It is used extensively in our [OOcharts](http://oocharts.com) app.
 
 ##Usage##
 
