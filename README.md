@@ -128,7 +128,3 @@ Checks whether a filter value is valid.
 ```js
 gav.checkFilter('ga:visits>10;ga:country==Canada'); //returns true
 ```
-
-##License##
-
-MIT
