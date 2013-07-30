@@ -5,7 +5,7 @@
 	"version": "0.1.1",
 	"repository": {
 		"type" : "git",
-		"url" : "http://github.com/tinbin/ga-validator.git"
+		"url" : "http://github.com/OOcharts/ga-validator.git"
 	},
 	"dependencies": {},
 	"devDependencies": {},
