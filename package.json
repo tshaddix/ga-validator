@@ -2,7 +2,7 @@
 	"author" : "tyler shaddix",
 	"name": "ga-validator",
 	"description": "A Google Analytics validator for NodeJS",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"repository": {
 		"type" : "git",
 		"url" : "http://github.com/OOcharts/ga-validator.git"
