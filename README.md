@@ -1,6 +1,10 @@
 Google Analytics Validator
 =========================
 
+
+[![Build Status](http://jenkins.tinb.in/buildStatus/icon?job=ga-validator)](http://jenkins.tinb.in/job/ga-validator/)
+
+
 Google Analytics validator for NodeJs. Easily validate Google Analytics query parameters. It is used extensively in our [OOcharts](http://oocharts.com) app.
 
 ##Usage##
