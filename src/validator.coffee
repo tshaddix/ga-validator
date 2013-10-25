@@ -182,6 +182,9 @@ addDimension 'ga:adContent', 'Ad Content'
 addDimension 'ga:socialNetwork', 'Social Network'
 addDimension 'ga:hasSocialSourceReferral', 'Has Social Source Referral'
 
+addDimension 'ga:fullReferrer', 'Full Referrer'
+addDimension 'ga:sourceMedium', 'Source Medium'
+
 #AdWords
 addMetric 'ga:impressions', 'Impressions'
 addMetric 'ga:adClicks', 'Ad Clicks'
@@ -236,6 +239,8 @@ addDimension 'ga:operatingSystem', 'Operating System'
 addDimension 'ga:operatingSystemVersion', 'Operating System Version'
 addDimension 'ga:deviceCategory', 'Device Category'
 addDimension 'ga:isMobile', 'Is Mobile'
+addDimension 'ga:isTablet', 'Is Tablet'
+addDimension 'ga:mobileDeviceMarketingName', 'Mobile Device Marketing Name'
 addDimension 'ga:mobileDeviceBranding', 'Mobile Device Branding'
 addDimension 'ga:mobileDeviceModel', 'Mobile Device Model'
 addDimension 'ga:mobileInputSelector', 'Mobile Input Selector'
@@ -345,9 +350,24 @@ addMetric 'ga:avgDomContentLoadedTime', 'Average DOM Content Loaded Time'
 addMetric 'ga:domLatencyMetricsSample', 'DOM Latency Merics Sample'
 
 #App Tracking
-addMetric 'ga:appviews', 'App Views'
-addMetric 'ga:uniqueAppviews', 'Unique App Views'
-addMetric 'ga:appviewsPerVisit', 'App Views Per Visit'
+addMetric 'ga:appviews', 'App Views' #deprecated
+addMetric 'ga:uniqueAppviews', 'Unique App Views' #deprecated
+addMetric 'ga:appviewsPerVisit', 'App Views Per Visit' #deprecated
+
+addMetric 'ga:screenviews', 'Screenviews'
+addMetric 'ga:uniqueScreenviews', 'Unique Screenviews'
+addMetric 'ga:screenviewsPerSession', 'Screenviews Per Session'
+addMetric 'ga:timeOnScreen', 'Time On Screen'
+addMetric 'ga:avgScreenviewDuration', 'Average Screenview Duration'
+
+addDimension 'ga:appInstallerId', 'App Installer Id'
+addDimension 'ga:appVersion', 'App Version'
+addDimension 'ga:appName', 'App Name'
+addDimension 'ga:appId', 'App Id'
+addDimension 'ga:screenName', 'Screen Name'
+addDimension 'ga:screenDepth', 'Screen Depth'
+addDimension 'ga:landingScreenName', 'Landing Screen Name'
+addDimension 'ga:exitScreenName', 'Exit Screen Name'
 
 #Event Tracking
 addMetric 'ga:totalEvents', 'Total Events'
@@ -384,6 +404,12 @@ addDimension 'ga:productSku', 'Product Sku'
 addDimension 'ga:productName', 'Product Name'
 addDimension 'ga:productCategory', 'Product Category'
 
+addMetric 'ga:currencyCode', 'Currency Code'
+addMetric 'ga:localItemRevenue', 'Local Item Revenue'
+addMetric 'ga:localTransactionRevenue', 'Local Transaction Revenue'
+addMetric 'ga:localTransactionShipping', 'Local Transaction Shipping'
+addMetric 'ga:localTransactionTax', 'Local Transaction Tax'
+
 #Social Interactions
 addMetric 'ga:socialInteractions', 'Social Interactions'
 addMetric 'ga:uniqueSocialInteractions', 'Unique Social Interactions'
@@ -406,6 +432,9 @@ addDimension 'ga:userTimingVariable', 'User Timing Variable'
 #Exception Tracking
 addMetric 'ga:exceptions', 'Exceptions'
 addMetric 'ga:fatalExceptions', 'Fatal Exceptions'
+addMetric 'ga:exceptionDescription', 'Exception Description'
+addMetric 'ga:exceptionsPerScreenview', 'Exceptions Per Screenview'
+addMetric 'ga:fatalExceptionsPerScreenview', 'Fatal Exceptions Per Screenview'
 
 #Experiments
 addDimension 'ga:experimentId', 'Experiment Id'
@@ -426,6 +455,11 @@ addDimension 'ga:nthMonth', 'Nth Month'
 addDimension 'ga:nthWeek', 'Nth Week'
 addDimension 'ga:nthDay', 'Nth Day'
 addDimension 'ga:dayOfWeek', 'Day Of Week'
+addDimension 'ga:dayOfWeekName', 'Day of Week Name'
+addDimension 'ga:dateHour', 'Date Hour'
+addDimension 'ga:isoWeek', 'ISO Week'
+addDimension 'ga:yearMonth', 'Year Month'
+addDimension 'ga:yearWeek', 'Year Week'
 
 #
 # Build Regex
