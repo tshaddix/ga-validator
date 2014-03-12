@@ -444,6 +444,10 @@ addDimension 'ga:experimentVariant', 'Experiment Variant'
 addDimension 'ga:customVarName(n)', 'Custom Var Name', 'ga:customVarName([0-9]+)'
 addDimension 'ga:customVarValue(n)', 'Custom Var Value', 'ga:customVarValue([0-9]+)'
 
+#Custom
+addDimension 'ga:dimension(n)', 'Custom Dimension', 'ga:dimension([0-9]+)'
+addDimension 'ga:metric(n)', 'Custom Metric', 'ga:metric([0-9]+)'
+
 #Time
 addDimension 'ga:date', 'Date'
 addDimension 'ga:year', 'Year'
