@@ -217,6 +217,16 @@ addDimension 'ga:adwordsAdGroupID', 'Adwords Ad Group ID'
 addDimension 'ga:adwordsCreativeID', 'Adwords Creative ID'
 addDimension 'ga:adwordsCriteriaID', 'Adwords Criteria ID'
 
+#AdSense
+addMetric 'ga:adsenseRevenue', 'AdSense Revenue'
+addMetric 'ga:adsenseAdUnitsViewed', 'AdSense Ad Units Viewed'
+addMetric 'ga:adsenseAdsViewed', 'AdSense Ads Viewed'
+addMetric 'ga:adsenseAdsClicks', 'AdSense Ads Clicks'
+addMetric 'ga:adsensePageImpressions', 'AdSense Page Impressions'
+addMetric 'ga:adsenseCTR', 'AdSenseCTR'
+addMetric 'ga:adsenseECPM', 'AdSenseECPM'
+addMetric 'ga:adsenseExits', 'AdSenseExits'
+
 #Goal Conversions
 addMetric 'ga:goal(n)Start', 'Goal Start', 'ga:goal([0-9]+)Start'
 addMetric 'ga:goalStartsAll', 'All Goal Starts'
