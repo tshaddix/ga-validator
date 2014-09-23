@@ -14,11 +14,11 @@ dimensions_regex = null
 # 	@param {string} section of metric
 #
 addMetric = (met, name, regex=met)->
-	metrics.push {
-		value : met
-		name : name
-		regex : new RegExp "^#{regex}$"
-	}
+  metrics.push {
+    value : met
+    name : name
+    regex : new RegExp "^#{regex}$"
+  }
 
 #
 # Adds a dimension to internal storage
@@ -28,11 +28,11 @@ addMetric = (met, name, regex=met)->
 # 	@param {string} section of dimension
 #
 addDimension = (dim, name, regex=dim)->
-	dimensions.push {
-		value : dim
-		name : name
-		regex : new RegExp "^#{regex}$"
-	}
+  dimensions.push {
+    value : dim
+    name : name
+    regex : new RegExp "^#{regex}$"
+  }
 
 #
 # Gets the dimension which matches param
@@ -40,8 +40,8 @@ addDimension = (dim, name, regex=dim)->
 # 	@returns {object} dimension if found or null
 #
 getDimension = (dim)->
-	return dimension for dimension in dimensions when dimension.regex.test dim
-	return null
+  return dimension for dimension in dimensions when dimension.regex.test dim
+  return null
 
 #
 # Gets the metric which matches param
@@ -49,8 +49,8 @@ getDimension = (dim)->
 # 	@returns {object} metric if found or null
 #
 getMetric = (met)->
-	return metric for metric in metrics when metric.regex.test met
-	return null
+  return metric for metric in metrics when metric.regex.test met
+  return null
 
 #
 # Checks wether a dimension value is valid
@@ -58,7 +58,7 @@ getMetric = (met)->
 # 	@returns {boolean} true if matched
 #
 checkDimension = (dim)->
-	return dimensions_regex.test dim
+  return dimensions_regex.test dim
 
 #
 # Checks wether a metric value is valid
@@ -66,7 +66,7 @@ checkDimension = (dim)->
 # 	@returns {boolean} true if matched
 #
 checkMetric = (met)->
-	return metrics_regex.test met
+  return metrics_regex.test met
 
 #
 # Checks wether a sort is valid
@@ -74,11 +74,11 @@ checkMetric = (met)->
 #	@returns {boolean} true if valid
 #
 checkSort = (sort)->
-	if sort.length is 0 then return false
+  if sort.length is 0 then return false
 
-	check = if sort[0] is '-' then sort.replace /^-/, '' else sort
+  check = if sort[0] is '-' then sort.replace /^-/, '' else sort
 
-	return checkMetric(check) or checkDimension(check)
+  return checkMetric(check) or checkDimension(check)
 
 #
 # Checks whether string is valid segment
@@ -86,10 +86,10 @@ checkSort = (sort)->
 # 	@return {boolean} true if valid
 #
 checkSegment = (seg)->
-	is_dynamic = new RegExp('^dynamic::').test seg
+  is_dynamic = new RegExp('^dynamic::').test seg
 
-	if is_dynamic then return checkFilter seg.replace /^dynamic::/, ''
-	else return new RegExp('^gaid::-?[0-9]+$').test seg
+  if is_dynamic then return checkFilter seg.replace /^dynamic::/, ''
+  else return new RegExp('^gaid::-?[0-9]+$').test seg
 
 #
 # Checks whether filter is valid format
@@ -97,60 +97,69 @@ checkSegment = (seg)->
 # 	@return {boolean} true if valid
 #
 checkFilter = (filter)->
-	# AND combinations are always valid
-	# so we can break them initially to lighten load
-	and_exps = filter.split ';'
+  # AND combinations are always valid
+  # so we can break them initially to lighten load
+  and_exps = filter.split ';'
 
-	#loop through all expressions
-	for and_exp in and_exps
+  #loop through all expressions
+  for and_exp in and_exps
 
-		#split into OR expressions
-		or_exps = and_exp.split ','
+    #split into OR expressions
+    or_exps = and_exp.split ','
 
-		exp_type = null
+    exp_type = null
 
-		#loop through or expressions
-		for or_exp in or_exps
-			if not exp_type?
-				ga_name = or_exp.split(new RegExp('==|!=|=@|!@|=~|!~|!=|>|<|>=|<=', 'g'), 2)[0]
+    #loop through or expressions
+    for or_exp in or_exps
+      if not exp_type?
+        ga_name = or_exp.split(new RegExp('==|!=|=@|!@|=~|!~|!=|>|<|>=|<=', 'g'), 2)[0]
 
-				if checkMetric(ga_name)
-					exp_type = 'metric'
-				else if checkDimension(ga_name)
-					exp_type = 'dimension'
-				else
-					return false
+        if checkMetric(ga_name)
+          exp_type = 'metric'
+        else if checkDimension(ga_name)
+          exp_type = 'dimension'
+        else
+          return false
 
 
-			components = if exp_type is 'metric' then components = or_exp.split new RegExp('==|!=|>|<|>=|<=', 'g'), 2 else or_exp.split new RegExp('==|!=|=@|!@|=~|!~', 'g'), 2
+      components = if exp_type is 'metric' then components = or_exp.split new RegExp('==|!=|>|<|>=|<=', 'g'), 2 else or_exp.split new RegExp('==|!=|=@|!@|=~|!~', 'g'), 2
 
-			#if components.length is 1 then return false
+      #if components.length is 1 then return false
 
-			if exp_type is 'metric'
-				if not checkMetric(components[0]) or not /^[0-9]+$/.test components[1] then return false
-			else
-				if not checkDimension(components[0]) then return false
+      if exp_type is 'metric'
+        if not checkMetric(components[0]) or not /^[0-9]+$/.test components[1] then return false
+      else
+        if not checkDimension(components[0]) then return false
 
-	return true
+  return true
 
 buildRegex = ->
-	mreg = ''
+  mreg = ''
 
-	for metric, i in metrics
-		if i isnt 0 then mreg += '|'
-		mreg += metric.regex.source
+  for metric, i in metrics
+    if i isnt 0 then mreg += '|'
+    mreg += metric.regex.source
 
-	metrics_regex = new RegExp mreg
+  metrics_regex = new RegExp mreg
 
-	dreg = ''
+  dreg = ''
 
-	for dim, i in dimensions
-		if i isnt 0 then dreg += '|'
-		dreg += dim.regex.source
+  for dim, i in dimensions
+    if i isnt 0 then dreg += '|'
+    dreg += dim.regex.source
 
-	dimensions_regex = new RegExp dreg
+  dimensions_regex = new RegExp dreg
 
-#User
+#Visitor (Deprecated)
+addMetric 'ga:visitors', 'Visitors'
+addMetric 'ga:newVisits', 'New Visits'
+addMetric 'ga:percentNewVisits', 'Percent New Visits'
+
+addDimension 'ga:visitorType', 'Visitor Type'
+addDimension 'ga:visitCount', 'Visit Count'
+addDimension 'ga:daysSinceLastVisit', 'Days Since Last Visit'
+
+# User
 addDimension 'ga:userType', 'User Type'
 addDimension 'ga:sessionCount', 'Count of Sessions'
 addDimension 'ga:daysSinceLastSession', 'Days Since Last Session'
@@ -160,8 +169,15 @@ addMetric 'ga:users', 'Users'
 addMetric 'ga:newUsers', 'New Users'
 addMetric 'ga:percentNewSessions', 'Percent New Sessions'
 
+
 #Session
-addDimension 'ga:sessionDurationBucket', 'Session Duration'
+
+addMetric 'ga:visits', 'Visits'
+addMetric 'ga:bounces', 'Bounces'
+addMetric 'ga:entranceBounceRate', 'Entrance Bounce Rate'
+addMetric 'ga:visitBounceRate', 'Visit Bounce Rate'
+addMetric 'ga:timeOnSite', 'Time On Site'
+addMetric 'ga:avgTimeOnSite', 'Average Time On Site'
 
 addMetric 'ga:sessions', 'Sessions'
 addMetric 'ga:bounces', 'Bounces'
@@ -169,21 +185,39 @@ addMetric 'ga:sessionDuration', 'Session Duration'
 addMetric 'ga:bounceRate', 'Bounce Rate'
 addMetric 'ga:avgSessionDuration', 'Avg. Session Duration'
 
+addDimension 'ga:visitLength', 'Visit Length'
+
+addDimension 'ga:sessionDurationBucket', 'Session Duration'
+
 #Traffic Sources
+addMetric 'ga:organicSearches', 'Organic Searches'
+
 addDimension 'ga:referralPath', 'Referral Path'
-addDimension 'ga:fullReferrer', 'Full Referrer'
 addDimension 'ga:campaign', 'Campaign'
 addDimension 'ga:source', 'Source'
 addDimension 'ga:medium', 'Medium'
-addDimension 'ga:sourceMedium', 'Source / Medium'
 addDimension 'ga:keyword', 'Keyword'
 addDimension 'ga:adContent', 'Ad Content'
 addDimension 'ga:socialNetwork', 'Social Network'
 addDimension 'ga:hasSocialSourceReferral', 'Has Social Source Referral'
 
-addMetric 'ga:organicSearches', 'Organic Searches'
+addDimension 'ga:fullReferrer', 'Full Referrer'
+addDimension 'ga:sourceMedium', 'Source Medium'
 
 #AdWords
+addMetric 'ga:impressions', 'Impressions'
+addMetric 'ga:adClicks', 'Ad Clicks'
+addMetric 'ga:adCost', 'Ad Cost'
+addMetric 'ga:CPM', 'Cost Per Thousand Impressions'
+addMetric 'ga:CPC', 'Cost to Advertiser Per Click'
+addMetric 'ga:CTR', 'Click Through Rate'
+addMetric 'ga:costPerTransaction', 'Cost Per Transaction'
+addMetric 'ga:costPerGoalConversion', 'Cost Per Goal Conversion'
+addMetric 'ga:costPerConversion', 'Cost per Conversion'
+addMetric 'ga:RPC', 'Revenue Per Click'
+addMetric 'ga:ROI', 'Returns On Investment'
+addMetric 'ga:margin', 'Margin'
+
 addDimension 'ga:adGroup', 'Ad Group'
 addDimension 'ga:adSlot', 'Ad Slot'
 addDimension 'ga:adSlotPosition', 'Ad Slot Position'
@@ -205,18 +239,15 @@ addDimension 'ga:adwordsCreativeID', 'AdWords Creative ID'
 addDimension 'ga:adwordsCriteriaID', 'AdWords Criteria ID'
 addDimension 'ga:isTrueViewVideoAd', 'TrueView Video Ad'
 
-addMetric 'ga:impressions', 'Impressions'
-addMetric 'ga:adClicks', 'Ad Clicks'
-addMetric 'ga:adCost', 'Ad Cost'
-addMetric 'ga:CPM', 'Cost Per Thousand Impressions'
-addMetric 'ga:CPC', 'Cost to Advertiser Per Click'
-addMetric 'ga:CTR', 'Click Through Rate'
-addMetric 'ga:costPerTransaction', 'Cost per Transaction'
-addMetric 'ga:costPerGoalConversion', 'Cost per Goal Conversion'
-addMetric 'ga:costPerConversion', 'Cost per Conversion'
-addMetric 'ga:RPC', 'Revenue Per Click'
-addMetric 'ga:ROI', 'Returns On Investment'
-addMetric 'ga:margin', 'Margin'
+#AdSense
+addMetric 'ga:adsenseRevenue', 'AdSense Revenue'
+addMetric 'ga:adsenseAdUnitsViewed', 'AdSense Ad Units Viewed'
+addMetric 'ga:adsenseAdsViewed', 'AdSense Ads Viewed'
+addMetric 'ga:adsenseAdsClicks', 'AdSense Ads Clicks'
+addMetric 'ga:adsensePageImpressions', 'AdSense Page Impressions'
+addMetric 'ga:adsenseCTR', 'AdSenseCTR'
+addMetric 'ga:adsenseECPM', 'AdSenseECPM'
+addMetric 'ga:adsenseExits', 'AdSenseExits'
 
 #Goal Conversions
 addDimension 'ga:goalCompletionLocation', 'Goal Completion Location'
@@ -224,183 +255,197 @@ addDimension 'ga:goalPreviousStep1', 'Goal Previous Step - 1'
 addDimension 'ga:goalPreviousStep2', 'Goal Previous Step - 2'
 addDimension 'ga:goalPreviousStep3', 'Goal Previous Step - 3'
 
-addMetric 'ga:goalXXStarts', 'Goal XX Starts'
-addMetric 'ga:goalStartsAll', 'Goal Starts'
-addMetric 'ga:goalXXCompletions', 'Goal XX Completions'
-addMetric 'ga:goalCompletionsAll', 'Goal Completions'
-addMetric 'ga:goalXXValue', 'Goal XX Value'
-addMetric 'ga:goalValueAll', 'Goal Value'
-addMetric 'ga:goalValuePerSession', 'Per Session Goal Value'
-addMetric 'ga:goalXXConversionRate', 'Goal XX Conversion Rate'
-addMetric 'ga:goalConversionRateAll', 'Goal Conversion Rate'
-addMetric 'ga:goalXXAbandons', 'Goal XX Abandoned Funnels'
-addMetric 'ga:goalAbandonsAll', 'Abandoned Funnels'
-addMetric 'ga:goalXXAbandonRate', 'Goal XX Abandonment Rate'
-addMetric 'ga:goalAbandonRateAll', 'Total Abandonment Rate'
+addMetric 'ga:goal(n)Start', 'Goal Start', 'ga:goal([0-9]+)Start'
+addMetric 'ga:goal(n)Starts', 'Goal Starts', 'ga:goal([0-9]+)Starts'
+addMetric 'ga:goalStartsAll', 'All Goal Starts'
+addMetric 'ga:goal(n)Completions', 'Goal Completions', 'ga:goal([0-9]+)Completions'
+addMetric 'ga:goalCompletionsAll', 'All Goal Completions'
+addMetric 'ga:goal(n)Value', 'Goal Value', 'ga:goal([0-9]+)Value'
+addMetric 'ga:goalValueAll', 'All Goal Values'
+addMetric 'ga:goalValuePerVisit', 'Goal Value Per Visit'
+addMetric 'ga:goalValuePerVisit', 'Goal Value Per Session'
+addMetric 'ga:goal(n)ConversionRate', 'Goal Conversion Rate', 'ga:goal([0-9]+)ConversionRate'
+addMetric 'ga:goalConversionRateAll', 'All Goal Conversion Rates'
+addMetric 'ga:goal(n)Abandons', 'Goal Abandons', 'ga:goal([0-9]+)Abandons'
+addMetric 'ga:goalAbandonsAll', 'All Goal Abandons'
+addMetric 'ga:goal(n)AbandonRate', 'Goal Abandon Rate', 'ga:goal([0-9]+)AbandonRate'
+addMetric 'ga:goalAbandonRateAll', 'All Goals Abandon Rate'
 
-#Platform or Device
+#Platfrom / Device
 addDimension 'ga:browser', 'Browser'
 addDimension 'ga:browserVersion', 'Browser Version'
 addDimension 'ga:operatingSystem', 'Operating System'
 addDimension 'ga:operatingSystemVersion', 'Operating System Version'
+addDimension 'ga:deviceCategory', 'Device Category'
+addDimension 'ga:isMobile', 'Is Mobile'
+addDimension 'ga:isTablet', 'Is Tablet'
+addDimension 'ga:mobileDeviceMarketingName', 'Mobile Device Marketing Name'
 addDimension 'ga:mobileDeviceBranding', 'Mobile Device Branding'
 addDimension 'ga:mobileDeviceModel', 'Mobile Device Model'
 addDimension 'ga:mobileInputSelector', 'Mobile Input Selector'
 addDimension 'ga:mobileDeviceInfo', 'Mobile Device Info'
-addDimension 'ga:mobileDeviceMarketingName', 'Mobile Device Marketing Name'
-addDimension 'ga:deviceCategory', 'Device Category'
 
-#Geo Network
+#Geo / Network
 addDimension 'ga:continent', 'Continent'
-addDimension 'ga:subContinent', 'Sub Continent Region'
-addDimension 'ga:country', 'Country / Territory'
+addDimension 'ga:subContinent', 'Sub Continent'
+addDimension 'ga:country', 'Country'
 addDimension 'ga:region', 'Region'
 addDimension 'ga:metro', 'Metro'
 addDimension 'ga:city', 'City'
 addDimension 'ga:latitude', 'Latitude'
 addDimension 'ga:longitude', 'Longitude'
 addDimension 'ga:networkDomain', 'Network Domain'
-addDimension 'ga:networkLocation', 'Service Provider'
+addDimension 'ga:networkLocation', 'Network Location'
 
 #System
 addDimension 'ga:flashVersion', 'Flash Version'
-addDimension 'ga:javaEnabled', 'Java Support'
+addDimension 'ga:javaEnabled', 'Java Enabled'
 addDimension 'ga:language', 'Language'
 addDimension 'ga:screenColors', 'Screen Colors'
+addDimension 'ga:screenResolution', 'Screen Resolution'
 addDimension 'ga:sourcePropertyDisplayName', 'Source Property Display Name'
 addDimension 'ga:sourcePropertyTrackingId', 'Source Property Tracking ID'
-addDimension 'ga:screenResolution', 'Screen Resolution'
 
 #Social Activities
-addDimension 'ga:socialActivityEndorsingUrl', 'Endorsing URL'
-addDimension 'ga:socialActivityDisplayName', 'Display Name'
+addMetric 'ga:socialActivities', 'Social Activities'
+
+addDimension 'ga:socialActivityEndorsingUrl', 'Social Activity Endorsing Url'
+addDimension 'ga:socialActivityDisplayName', 'Social Activity Display Name'
 addDimension 'ga:socialActivityPost', 'Social Activity Post'
 addDimension 'ga:socialActivityTimestamp', 'Social Activity Timestamp'
-addDimension 'ga:socialActivityUserHandle', 'Social User Handle'
-addDimension 'ga:socialActivityUserPhotoUrl', 'User Photo URL'
-addDimension 'ga:socialActivityUserProfileUrl', 'User Profile URL'
-addDimension 'ga:socialActivityContentUrl', 'Shared URL'
-addDimension 'ga:socialActivityTagsSummary', 'Social Tags Summary'
-addDimension 'ga:socialActivityAction', 'Originating Social Action'
-addDimension 'ga:socialActivityNetworkAction', 'Social Network and Action'
-
-addMetric 'ga:socialActivities', 'Data Hub Activities'
+addDimension 'ga:socialActivityUserHandle', 'Social Activity User Handle'
+addDimension 'ga:socialActivityUserPhotoUrl', 'Social Activity User Photo Url'
+addDimension 'ga:socialActivityUserProfileUrl', 'Social Activity User Profile Url'
+addDimension 'ga:socialActivityContentUrl', 'Social Activity Content Url'
+addDimension 'ga:socialActivityTagsSummary', 'Social Activity Tags Summary'
+addDimension 'ga:socialActivityAction', 'Social Activity Action'
+addDimension 'ga:socialActivityNetworkAction', 'Social Activity Network Action'
 
 #Page Tracking
+addMetric 'ga:pageValue', 'Page Value'
+addMetric 'ga:entrances', 'Entrances'
+addMetric 'ga:entraceRate', 'Entrance Rate'
+addMetric 'ga:pageviews', 'Page Views'
+addMetric 'ga:pageviewsPerVisit', 'Page Views Per Visit'
+addMetric 'ga:pageviewsPerSession', 'Page Views Per Session'
+addMetric 'ga:uniquePageviews', 'Unique Page Views'
+addMetric 'ga:timeOnPage', 'Time On Page'
+addMetric 'ga:avgTimeOnPage', 'Average Time On Page'
+addMetric 'ga:exits', 'Exits'
+addMetric 'ga:exitRate', 'Exit Rate'
+
 addDimension 'ga:hostname', 'Hostname'
-addDimension 'ga:pagePath', 'Page'
-addDimension 'ga:pagePathLevel1', 'Page path level 1'
-addDimension 'ga:pagePathLevel2', 'Page path level 2'
-addDimension 'ga:pagePathLevel3', 'Page path level 3'
-addDimension 'ga:pagePathLevel4', 'Page path level 4'
+addDimension 'ga:pagePath', 'Page Path'
+addDimension 'ga:pagePathLevel1', 'Page Path Level 1'
+addDimension 'ga:pagePathLevel2', 'Page Path Level 2'
+addDimension 'ga:pagePathLevel3', 'Page Path Level 3'
+addDimension 'ga:pagePathLevel4', 'Page Path Level 4'
 addDimension 'ga:pageTitle', 'Page Title'
-addDimension 'ga:landingPagePath', 'Landing Page'
-addDimension 'ga:secondPagePath', 'Second Page'
-addDimension 'ga:exitPagePath', 'Exit Page'
+addDimension 'ga:landingPagePath', 'Landing Page Path'
+addDimension 'ga:secondPagePath', 'Second Page Path'
+addDimension 'ga:exitPagePath', 'Exit Page Path'
 addDimension 'ga:previousPagePath', 'Previous Page Path'
 addDimension 'ga:nextPagePath', 'Next Page Path'
 addDimension 'ga:pageDepth', 'Page Depth'
 
-addMetric 'ga:pageValue', 'Page Value'
-addMetric 'ga:entrances', 'Entrances'
-addMetric 'ga:pageviews', 'Pageviews'
-addMetric 'ga:uniquePageviews', 'Unique Pageviews'
-addMetric 'ga:timeOnPage', 'Time on Page'
-addMetric 'ga:exits', 'Exits'
-addMetric 'ga:entranceRate', 'Entrances / Pageviews'
-addMetric 'ga:pageviewsPerSession', 'Pages / Session'
-addMetric 'ga:avgTimeOnPage', 'Avg. Time on Page'
-addMetric 'ga:exitRate', '% Exit'
-
 #Content Grouping
-addDimension 'ga:landingContentGroupXX', 'Landing Page Group XX'
-addDimension 'ga:previousContentGroupXX', 'Previous Page Group XX'
-addDimension 'ga:contentGroupXX', 'Page Group XX'
-addDimension 'ga:nextContentGroupXX', 'Next Page Group XX'
+addDimension 'ga:landingContentGroup(n)', 'Landing Page Group (n)', 'ga:landingContentGroup([1-5])'
+addDimension 'ga:previousContentGroup(n)', 'Previous Page Group (n)', 'ga:previousContentGroup([1-5])'
+addDimension 'ga:contentGroup(n)', 'Page Group (n)', 'ga:contentGroup([1-5])'
+addDimension 'ga:nextContentGroup(n)', 'Next Page Group (n)', 'ga:nextContentGroup([1-5])'
 
-addMetric 'ga:contentGroupUniqueViewsXX', 'Unique Views'
+addMetric 'ga:contentGroupUniqueViews(n)', 'Unique Views', 'ga:contentGroupUniqueViews([1-5])'
 
 #Internal Search
-addDimension 'ga:searchUsed', 'Site Search Status'
-addDimension 'ga:searchKeyword', 'Search Term'
-addDimension 'ga:searchKeywordRefinement', 'Refined Keyword'
-addDimension 'ga:searchCategory', 'Site Search Category'
-addDimension 'ga:searchStartPage', 'Start Page'
-addDimension 'ga:searchDestinationPage', 'Destination Page'
-
-addMetric 'ga:searchResultViews', 'Results Pageviews'
-addMetric 'ga:searchUniques', 'Total Unique Searches'
-addMetric 'ga:searchSessions', 'Sessions with Search'
+addMetric 'ga:searchResultViews', 'Search Result Views'
+addMetric 'ga:searchUniques', 'Unique Searches'
+addMetric 'ga:avgSearchResultViews', 'Average Search Result Views'
+addMetric 'ga:searchVisits', 'Search Visits'
+addMetric 'ga:percentVisitsWithSearch', 'Percent Visits with Search'
+addMetric 'ga:percentSessionsWithSearch', 'Percent Sessions with Search'
 addMetric 'ga:searchDepth', 'Search Depth'
 addMetric 'ga:searchRefinements', 'Search Refinements'
-addMetric 'ga:searchDuration', 'Time after Search'
-addMetric 'ga:searchExits', 'Search Exits'
-addMetric 'ga:avgSearchResultViews', 'Results Pageviews / Search'
-addMetric 'ga:percentSessionsWithSearch', '% Sessions with Search'
-addMetric 'ga:avgSearchDepth', 'Average Search Depth'
+addMetric 'ga:avgSearchDept', 'Average Search Depth'
+addMetric 'ga:searchDuration', 'Search Duration'
 addMetric 'ga:percentSearchRefinements', '% Search Refinements'
-addMetric 'ga:avgSearchDuration', 'Time after Search'
-addMetric 'ga:searchExitRate', '% Search Exits'
-addMetric 'ga:searchGoalXXConversionRate', 'Site Search Goal XX Conversion Rate'
-addMetric 'ga:searchGoalConversionRateAll', 'Site Search Goal Conversion Rate'
-addMetric 'ga:goalValueAllPerSearch', 'Per Search Goal Value'
+addMetric 'ga:avgSearchDuration', 'Average Search Duration'
+addMetric 'ga:searchExits', 'Search Exits'
+addMetric 'ga:searchExitRate', 'Search Exit Rate'
+addMetric 'ga:searchGoal(n)ConversionRate', 'Search Goal Conversion Rate', 'ga:searchGoal([0-9]+)ConversionRate'
+addMetric 'ga:searchGoalConversionRateAll', 'Search All Goals Conversion Rate'
+addMetric 'ga:goalValueAllPerSearch', 'Goal Value Per Search'
+addMetric 'ga:searchSessions', 'Sessions with Search'
+
+addDimension 'ga:searchUsed', 'Search Used'
+addDimension 'ga:searchKeyword', 'Search Keyword'
+addDimension 'ga:searchKeywordRefinement', 'Search Keyword Refinement'
+addDimension 'ga:searchCategory', 'Search Category'
+addDimension 'ga:searchStartPage', 'Search Start Page'
+addDimension 'ga:searchDestinationPage', 'Search Destination Page'
 
 #Site Speed
-addMetric 'ga:pageLoadTime', 'Page Load Time (ms)'
+addMetric 'ga:pageLoadTime', 'Page Load Time'
 addMetric 'ga:pageLoadSample', 'Page Load Sample'
-addMetric 'ga:domainLookupTime', 'Domain Lookup Time (ms)'
-addMetric 'ga:pageDownloadTime', 'Page Download Time (ms)'
-addMetric 'ga:redirectionTime', 'Redirection Time (ms)'
-addMetric 'ga:serverConnectionTime', 'Server Connection Time (ms)'
-addMetric 'ga:serverResponseTime', 'Server Response Time (ms)'
+addMetric 'ga:avgPageLoadTime', 'Average Page Load Time'
+addMetric 'ga:domainLookupTime', 'Domain Lookup Time'
+addMetric 'ga:avgDomainLookupTime', 'Average Domain Lookup Time'
+addMetric 'ga:pageDownloadTime', 'Page Download Time'
+addMetric 'ga:avgPageDownloadTime', 'Average Page Download Time'
+addMetric 'ga:redirectionTime', 'Redirection Time'
+addMetric 'ga:avgRedirectionTime', 'Average Redirection Time'
+addMetric 'ga:serverConnectionTime', 'Server Connection Time'
+addMetric 'ga:avgServerConnectionTime', 'Average Server Connection Time'
+addMetric 'ga:serverResponseTime', 'Server Response Time'
+addMetric 'ga:avgServerResponseTime', 'Average Server Response Time'
 addMetric 'ga:speedMetricsSample', 'Speed Metrics Sample'
-addMetric 'ga:domInteractiveTime', 'Document Interactive Time (ms)'
-addMetric 'ga:domContentLoadedTime', 'Document Content Loaded Time (ms)'
-addMetric 'ga:domLatencyMetricsSample', 'DOM Latency Metrics Sample'
-addMetric 'ga:avgPageLoadTime', 'Avg. Page Load Time (sec)'
-addMetric 'ga:avgDomainLookupTime', 'Avg. Domain Lookup Time (sec)'
-addMetric 'ga:avgPageDownloadTime', 'Avg. Page Download Time (sec)'
-addMetric 'ga:avgRedirectionTime', 'Avg. Redirection Time (sec)'
-addMetric 'ga:avgServerConnectionTime', 'Avg. Server Connection Time (sec)'
-addMetric 'ga:avgServerResponseTime', 'Avg. Server Response Time (sec)'
-addMetric 'ga:avgDomInteractiveTime', 'Avg. Document Interactive Time (sec)'
-addMetric 'ga:avgDomContentLoadedTime', 'Avg. Document Content Loaded Time (sec)'
+addMetric 'ga:domInteractiveTime', 'DOM Interactive Time'
+addMetric 'ga:avgDomInteractiveTime', 'Average DOM Interactive Time'
+addMetric 'ga:domContentLoadedTime', 'DOM Content Loaded Time'
+addMetric 'ga:avgDomContentLoadedTime', 'Average DOM Content Loaded Time'
+addMetric 'ga:domLatencyMetricsSample', 'DOM Latency Merics Sample'
 
 #App Tracking
-addDimension 'ga:appInstallerId', 'App Installer ID'
+addMetric 'ga:appviews', 'App Views' #deprecated
+addMetric 'ga:uniqueAppviews', 'Unique App Views' #deprecated
+addMetric 'ga:appviewsPerVisit', 'App Views Per Visit' #deprecated
+
+addMetric 'ga:screenviews', 'Screenviews'
+addMetric 'ga:uniqueScreenviews', 'Unique Screenviews'
+addMetric 'ga:screenviewsPerSession', 'Screenviews Per Session'
+addMetric 'ga:timeOnScreen', 'Time On Screen'
+addMetric 'ga:avgScreenviewDuration', 'Average Screenview Duration'
+
+addDimension 'ga:appInstallerId', 'App Installer Id'
 addDimension 'ga:appVersion', 'App Version'
 addDimension 'ga:appName', 'App Name'
-addDimension 'ga:appId', 'App ID'
+addDimension 'ga:appId', 'App Id'
 addDimension 'ga:screenName', 'Screen Name'
 addDimension 'ga:screenDepth', 'Screen Depth'
-addDimension 'ga:landingScreenName', 'Landing Screen'
-addDimension 'ga:exitScreenName', 'Exit Screen'
-
-addMetric 'ga:screenviews', 'Screen Views'
-addMetric 'ga:uniqueScreenviews', 'Unique Screen Views'
-addMetric 'ga:timeOnScreen', 'Time on Screen'
-addMetric 'ga:avgScreenviewDuration', 'Avg. Time on Screen'
-addMetric 'ga:screenviewsPerSession', 'Screens / Session'
+addDimension 'ga:landingScreenName', 'Landing Screen Name'
+addDimension 'ga:exitScreenName', 'Exit Screen Name'
 
 #Event Tracking
+addMetric 'ga:totalEvents', 'Total Events'
+addMetric 'ga:uniqueEvents', 'Unique Events'
+addMetric 'ga:eventValue', 'Event Value'
+addMetric 'ga:avgEventValue', 'Average Event Value'
+addMetric 'ga:visitsWithEvent', 'Visits With Event'
+addMetric 'ga:eventsPerVisitWithEvent', 'Events Per Visit With Event'
+addMetric 'ga:sessionsWithEvent', 'Sessions with Event'
+addMetric 'ga:eventsPerSessionWithEvent', 'Events / Session with Event'
+
 addDimension 'ga:eventCategory', 'Event Category'
 addDimension 'ga:eventAction', 'Event Action'
 addDimension 'ga:eventLabel', 'Event Label'
 
-addMetric 'ga:totalEvents', 'Total Events'
-addMetric 'ga:uniqueEvents', 'Unique Events'
-addMetric 'ga:eventValue', 'Event Value'
-addMetric 'ga:sessionsWithEvent', 'Sessions with Event'
-addMetric 'ga:avgEventValue', 'Avg. Value'
-addMetric 'ga:eventsPerSessionWithEvent', 'Events / Session with Event'
-
 #Ecommerce
-addDimension 'ga:transactionId', 'Transaction Id'
+addDimension 'ga:transactionId' , 'Transaction ID'
 addDimension 'ga:affiliation', 'Affiliation'
-addDimension 'ga:sessionsToTransaction', 'Sessions to Transaction'
+addDimension 'ga:visitsToTransaction', 'Visits to Transactions'
+addDimension 'ga:sessionsToTransaction', 'Sessions to Transactions'
 addDimension 'ga:daysToTransaction', 'Days to Transaction'
-addDimension 'ga:productSku', 'Product SKU'
-addDimension 'ga:productName', 'Product'
+addDimension 'ga:productSku', 'Product Stock Unit'
+addDimension 'ga:productName', 'Product Name'
 addDimension 'ga:productCategory', 'Product Category'
 addDimension 'ga:currencyCode', 'Currency Code'
 addDimension 'ga:checkoutOptions', 'Checkout Options'
@@ -411,24 +456,25 @@ addDimension 'ga:internalPromotionPosition', 'Internal Promotion Position'
 addDimension 'ga:orderCouponCode', 'Order Coupon Code'
 addDimension 'ga:productBrand', 'Product Brand'
 addDimension 'ga:productCategoryHierarchy', 'Product Category (Enhanced Ecommerce)'
-addDimension 'ga:productCategoryLevelXX', 'Product Category Level XX'
+addDimension 'ga:productCategoryLevel(n)', 'Product Category Level (n)', 'ga:productCategoryLevel([1-5])'
 addDimension 'ga:productCouponCode', 'Product Coupon Code'
 addDimension 'ga:productListName', 'Product List Name'
 addDimension 'ga:productListPosition', 'Product List Position'
 addDimension 'ga:productVariant', 'Product Variant'
 addDimension 'ga:shoppingStage', 'Shopping Stage'
 
-addMetric 'ga:transactions', 'Transactions'
-addMetric 'ga:transactionRevenue', 'Revenue'
-addMetric 'ga:transactionShipping', 'Shipping'
-addMetric 'ga:transactionTax', 'Tax'
-addMetric 'ga:itemQuantity', 'Quantity'
+addMetric 'ga:transactions' , 'Transactions'
+addMetric 'ga:transactionRevenue', 'Transaction Revenue'
+addMetric 'ga:transactionShipping', 'Transaction Shipping Costs'
+addMetric 'ga:transactionTax', 'Transaction Tax'
+addMetric 'ga:itemQuantity', 'Item Quantity'
 addMetric 'ga:uniquePurchases', 'Unique Purchases'
-addMetric 'ga:itemRevenue', 'Product Revenue'
-addMetric 'ga:localTransactionRevenue', 'Local Revenue'
-addMetric 'ga:localTransactionShipping', 'Local Shipping'
-addMetric 'ga:localTransactionTax', 'Local Tax'
-addMetric 'ga:localItemRevenue', 'Local Product Revenue'
+addMetric 'ga:itemRevenue', 'Item Revenue'
+addMetric 'ga:localTransactionRevenue', 'Local Transaction Revenue'
+addMetric 'ga:localTransactionShipping', 'Local Transaction Shipping Costs'
+addMetric 'ga:localTransactionTax', 'Local Transaction Tax'
+addMetric 'ga:localItemRevenue', 'Local Item Revenue'
+
 addMetric 'ga:buyToDetailRate', 'Buy-to-Detail Rate'
 addMetric 'ga:cartToDetailRate', 'Cart-to-Detail Rate'
 addMetric 'ga:internalPromotionClicks', 'Internal Promotion Clicks'
@@ -460,65 +506,65 @@ addMetric 'ga:productListCTR', 'Product List CTR'
 addMetric 'ga:productRevenuePerPurchase', 'Product Revenue per Purchase'
 
 #Social Interactions
-addDimension 'ga:socialInteractionNetwork', 'Social Source'
-addDimension 'ga:socialInteractionAction', 'Social Action'
-addDimension 'ga:socialInteractionNetworkAction', 'Social Source and Action'
-addDimension 'ga:socialInteractionTarget', 'Social Entity'
+addMetric 'ga:socialInteractions', 'Social Interactions'
+addMetric 'ga:uniqueSocialInteractions', 'Unique Social Interactions'
+addMetric 'ga:socialInteractionsPerVisit', 'Social Interactions Per Visit'
+addMetric 'ga:socialInteractionsPerSession', 'Social Interactions Per Session'
+
+addDimension 'ga:socialInteractionNetwork', 'Social Interaction Network'
+addDimension 'ga:socialInteractionAction', 'Social Interaction Action'
+addDimension 'ga:socialInteractionNetworkAction', 'Social Interaction Network Action'
+addDimension 'ga:socialInteractionTarget', 'Social Interaction Target'
 addDimension 'ga:socialEngagementType', 'Social Type'
 
-addMetric 'ga:socialInteractions', 'Social Actions'
-addMetric 'ga:uniqueSocialInteractions', 'Unique Social Actions'
-addMetric 'ga:socialInteractionsPerSession', 'Actions Per Social Session'
-
 #User Timings
-addDimension 'ga:userTimingCategory', 'Timing Category'
-addDimension 'ga:userTimingLabel', 'Timing Label'
-addDimension 'ga:userTimingVariable', 'Timing Variable'
-
-addMetric 'ga:userTimingValue', 'User Timing (ms)'
+addMetric 'ga:userTimingValue', 'User Timing Value'
 addMetric 'ga:userTimingSample', 'User Timing Sample'
-addMetric 'ga:avgUserTimingValue', 'Avg. User Timing (sec)'
+addMetric 'ga:avgUserTimingValue', 'Average User Timing Value'
 
-#Exceptions
-addDimension 'ga:exceptionDescription', 'Exception Description'
+addDimension 'ga:userTimingCategory', 'User Timing Category'
+addDimension 'ga:userTimingLabel', 'User Timing Label'
+addDimension 'ga:userTimingVariable', 'User Timing Variable'
 
+#Exception Tracking
 addMetric 'ga:exceptions', 'Exceptions'
-addMetric 'ga:fatalExceptions', 'Crashes'
-addMetric 'ga:exceptionsPerScreenview', 'Exceptions / Screen'
-addMetric 'ga:fatalExceptionsPerScreenview', 'Crashes / Screen'
+addMetric 'ga:fatalExceptions', 'Fatal Exceptions'
+addMetric 'ga:exceptionDescription', 'Exception Description'
+addMetric 'ga:exceptionsPerScreenview', 'Exceptions Per Screenview'
+addMetric 'ga:fatalExceptionsPerScreenview', 'Fatal Exceptions Per Screenview'
 
-#Content Experiments
-addDimension 'ga:experimentId', 'Experiment ID'
-addDimension 'ga:experimentVariant', 'Variation'
+#Experiments
+addDimension 'ga:experimentId', 'Experiment Id'
+addDimension 'ga:experimentVariant', 'Experiment Variant'
 
-#Custom Variables or Columns
-addDimension 'ga:dimensionXX', 'Custom Dimension XX'
-addDimension 'ga:customVarNameXX', 'Custom Variable (Key XX)'
-addDimension 'ga:customVarValueXX', 'Custom Variable (Value XX)'
+#Custom Variables
+addDimension 'ga:customVarName(n)', 'Custom Var Name', 'ga:customVarName([0-9]+)'
+addDimension 'ga:customVarValue(n)', 'Custom Var Value', 'ga:customVarValue([0-9]+)'
 
-addMetric 'ga:metricXX', 'Custom Metric XX Value'
+#Custom
+addDimension 'ga:dimension(n)', 'Custom Dimension', 'ga:dimension([0-9]+)'
+addMetric 'ga:metric(n)', 'Custom Metric', 'ga:metric([0-9]+)'
 
 #Time
 addDimension 'ga:date', 'Date'
 addDimension 'ga:year', 'Year'
-addDimension 'ga:month', 'Month of the year'
-addDimension 'ga:week', 'Week of the Year'
-addDimension 'ga:day', 'Day of the month'
+addDimension 'ga:month', 'Month'
+addDimension 'ga:week', 'Week'
+addDimension 'ga:day', 'Day'
 addDimension 'ga:hour', 'Hour'
-addDimension 'ga:minute', 'Minute'
-addDimension 'ga:nthMonth', 'Month Index'
-addDimension 'ga:nthWeek', 'Week Index'
-addDimension 'ga:nthDay', 'Day Index'
-addDimension 'ga:nthMinute', 'Minute Index'
-addDimension 'ga:dayOfWeek', 'Day of Week'
+addDimension 'ga:nthMonth', 'Nth Month'
+addDimension 'ga:nthWeek', 'Nth Week'
+addDimension 'ga:nthDay', 'Nth Day'
+addDimension 'ga:nthMinute', 'Nth Minute'
+addDimension 'ga:nthHour', 'Nth Hour'
+addDimension 'ga:dayOfWeek', 'Day Of Week'
 addDimension 'ga:dayOfWeekName', 'Day of Week Name'
-addDimension 'ga:dateHour', 'Hour of Day'
-addDimension 'ga:yearMonth', 'Month of Year'
-addDimension 'ga:yearWeek', 'Week of Year'
-addDimension 'ga:isoWeek', 'ISO Week of the Year'
+addDimension 'ga:dateHour', 'Date Hour'
+addDimension 'ga:isoWeek', 'ISO Week'
 addDimension 'ga:isoYear', 'ISO Year'
 addDimension 'ga:isoYearIsoWeek', 'ISO Week of ISO Year'
-addDimension 'ga:nthHour', 'Hour Index'
+addDimension 'ga:yearMonth', 'Year Month'
+addDimension 'ga:yearWeek', 'Year Week'
 
 #Audience
 addDimension 'ga:userAgeBracket', 'Age'
@@ -526,16 +572,6 @@ addDimension 'ga:userGender', 'Gender'
 addDimension 'ga:interestOtherCategory', 'Other Category'
 addDimension 'ga:interestAffinityCategory', 'Affinity Category (reach)'
 addDimension 'ga:interestInMarketCategory', 'In-Market Segment'
-
-#Adsense
-addMetric 'ga:adsenseRevenue', 'AdSense Revenue'
-addMetric 'ga:adsenseAdUnitsViewed', 'AdSense Ad Units Viewed'
-addMetric 'ga:adsenseAdsViewed', 'AdSense Ads Viewed'
-addMetric 'ga:adsenseAdsClicks', 'AdSense Ads Clicked'
-addMetric 'ga:adsensePageImpressions', 'AdSense Page Impressions'
-addMetric 'ga:adsenseExits', 'AdSense Exits'
-addMetric 'ga:adsenseCTR', 'AdSense CTR'
-addMetric 'ga:adsenseECPM', 'AdSense eCPM'
 
 #Channel Grouping
 addDimension 'ga:channelGrouping', 'Default Channel Grouping'

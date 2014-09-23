@@ -6,7 +6,7 @@ describe('ga-validator', function(){
         it('should return metric objects for metric', function(){
 
             validator.metrics.forEach(function(metric){
-                should.exist(validator.getMetric(metric.value.replace('(n)', Math.round(Math.random()*10).toString())));
+                should.exist(validator.getMetric(metric.value.replace('(n)', '1')));
             });
 
         });
@@ -23,7 +23,7 @@ describe('ga-validator', function(){
         it('should return dimension objects for dimension', function(){
 
             validator.dimensions.forEach(function(d){
-                should.exist(validator.getDimension(d.value.replace('(n)', Math.round(Math.random()*10).toString())));
+                should.exist(validator.getDimension(d.value.replace('(n)', '1')));
             });
 
         });
@@ -38,7 +38,7 @@ describe('ga-validator', function(){
     describe('checkMetric', function(){
         it('should verify a valid metric', function(){
             validator.metrics.forEach(function(metric){
-               validator.checkMetric(metric.value.replace('(n)', Math.round(Math.random()*10).toString())).should.be.true;
+               validator.checkMetric(metric.value.replace('(n)', '1')).should.be.true;
             });
         });
 
@@ -50,7 +50,7 @@ describe('ga-validator', function(){
     describe('checkDimension', function(){
         it('should verify a valid dimension', function(){
             validator.dimensions.forEach(function(d){
-                validator.checkDimension(d.value.replace('(n)', Math.round(Math.random()*10).toString())).should.be.true;
+                validator.checkDimension(d.value.replace('(n)', '1')).should.be.true;
             });
         });
 
@@ -69,13 +69,13 @@ describe('ga-validator', function(){
         it('should verify valid sort', function(){
 
             validator.metrics.forEach(function(metric){
-                validator.checkSort(metric.value.replace('(n)', Math.round(Math.random()*10).toString())).should.be.true;
-                validator.checkSort('-' + metric.value.replace('(n)', Math.round(Math.random()*10).toString())).should.be.true;
+                validator.checkSort(metric.value.replace('(n)', '1')).should.be.true;
+                validator.checkSort('-' + metric.value.replace('(n)', '1')).should.be.true;
             });
 
             validator.dimensions.forEach(function(d){
-                validator.checkSort(d.value.replace('(n)', Math.round(Math.random()*10).toString())).should.be.true;
-                validator.checkSort('-' + d.value.replace('(n)', Math.round(Math.random()*10).toString())).should.be.true;
+                validator.checkSort(d.value.replace('(n)', '1')).should.be.true;
+                validator.checkSort('-' + d.value.replace('(n)', '1')).should.be.true;
             });
         });
 
